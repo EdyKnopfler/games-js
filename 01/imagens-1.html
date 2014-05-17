@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Imagens</title>
+</head>
+
+<body>
+   <canvas id="meu_canvas" width="500" height="100"></canvas>
+   <script>
+      // Canvas e contexto
+      var canvas = document.getElementById('meu_canvas');
+      var context = canvas.getContext('2d');
+      
+      // Carregar a imagem
+      var imagem = new Image();
+      imagem.src = 'img/ovni.png';
+      imagem.onload = function() {
+         // Começar na posição 20
+         var x = 20;
+         
+         // Desenhar as imagens
+         for (var i = 1; i <= 5; i++) {
+            context.drawImage(imagem, x, 20, 64, 32);
+            x += 70;
+         }
+      }
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<head>
+   <title>Bug ao excluir elementos de um array</title>
+   <meta charset="utf-8">
+</head>
+
+<body>
+   <script>
+      // Criar um array
+      var meuArray = ['banana', 'laranja', 'limão'];
+      
+      // Fazer um loop
+      for (var i in meuArray) {
+         // Forçar uma exclusão dentro do loop
+         if (meuArray[i] == 'laranja')
+            meuArray = excluirElemento(meuArray[i], meuArray);
+            
+         // Fazer alguma tarefa com o array
+         document.write(meuArray[i] + '<br>');
+      }
+      
+      function excluirElemento(elemento, array) {
+         var novoArray = [];
+         
+         for (var i in array) {
+            if (array[i] != elemento)
+               novoArray[i] = array[i];
+         }
+         
+         return novoArray;
+      }
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <title>Personagem controlável e animado</title>
+   <script src="spritesheet.js"></script> 
+   <script src="animacao.js"></script> 
+   <script src="teclado.js"></script> 
+   <script src="sonic.js"></script>
+</head>
+
+<body>
+   <canvas id="canvas_sonic" width="500" height="500"></canvas>
+   <script>
+      var canvas = document.getElementById('canvas_sonic');
+      var context = canvas.getContext('2d');
+
+      var teclado = new Teclado(document); 
+      var animacao = new Animacao(context); 
+
+      var imgSonic = new Image(); 
+      imgSonic.src = 'spritesheet.png'; 
+
+      var sonic = new Sonic(context, teclado, imgSonic);
+      sonic.x = 0; 
+      sonic.y = 200; 
+      animacao.novoSprite(sonic);
+
+      imgSonic.onload = function() {
+         animacao.ligar();
+      }
+   </script>
+</body>
+
+</html>
+
+
+
