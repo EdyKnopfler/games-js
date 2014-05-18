@@ -157,6 +157,14 @@
             animacao.desligar();
             gameOver();
          }
+         
+         // Pontuação
+         colisor.aoColidir = function(o1, o2) {
+            // Tiro com Ovni
+            if ( (o1 instanceof Tiro && o2 instanceof Ovni) ||
+                 (o1 instanceof Ovni && o2 instanceof Tiro) )
+               painel.pontuacao += 10;
+         }
       }
       
       function criacaoInimigos() {
