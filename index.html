@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+   
+<head>
+   <title>Jogo de Nave</title>
+   <script src="framework/animacao.js"></script>
+   <script src="framework/teclado.js"></script>
+   <script src="framework/colisor.js"></script>
+   <script src="framework/carregador-assets.js"></script>
+   <script src="jogo/fundo.js"></script>
+   <script src="jogo/nave.js"></script>
+   <script src="jogo/ovni.js"></script>
+   <script src="jogo/tiro.js"></script>
+   <script src="framework/spritesheet.js"></script>
+   <script src="jogo/explosao.js"></script>
+   <script src="jogo/painel.js"></script>
+   <script src="jogo/criador-inimigos.js"></script>
+   <script src="jogo/botao-jogar.js"></script>
+   <script src="jogo/menu.js"></script>
+   <script src="jogo/game-over.js"></script>
+   <script src="jogo/partida.js"></script>
+   <script src="jogo/jogo-nave.js"></script>
+   <style>
+   #link_jogar {
+      /* Inicia oculto */
+      display: none;
+   
+      /* Cores e fundo */
+      color: yellow;
+      background: url(img/botao-jogar.png);
+         
+      /* Fonte */
+      font-size: 20px;
+      font-family: sans-serif;
+      
+      /* Sem sublinhado e com sombra */
+      text-decoration: none;
+      text-shadow: 2px 2px 5px black;
+         
+      /* Posicionamento */
+      position: absolute;
+      left: 220px;
+      top: 330px;
+
+      /* A imagem do botão é 72x72, descontamos os paddings */
+      width: 52px;
+      height: 26px;
+      padding: 23px 10px;
+   }
+   </style>
+</head>
+
+<body>
+   <canvas id="canvas_animacao" width="500" height="500"></canvas>
+   
+   <a id="link_jogar" href="#">Jogar</a>
+   
+   <script>
+      'use strict';
+
+      const canvas = document.getElementById('canvas_animacao');
+      const elementoLinkJogar = document.getElementById('link_jogar');
+      const jogoNave = new JogoNave(canvas, elementoLinkJogar);
+
+      elementoLinkJogar.addEventListener('click', (evento) => {
+         evento.preventDefault();
+         jogoNave.iniciarJogo();
+      });
+
+      jogoNave.iniciar();
+   </script>
+</body>
+
+</html>
