@@ -105,3 +105,11 @@ crescer o suficiente para justificar:
 - O pool seria dono único do "obter" (ponto único de verdade, evitando dois
   lugares reaproveitando o mesmo slot) — provavelmente vivendo dentro da
   própria `Partida`, já dona do ciclo de vida de uma rodada
+
+## 7. Refactor dos retângulos de colisão
+
+Ficou mais eficiente, mas agora o código está confuso. Para melhorar:
+- A constante em cada sprite volta a ter só valores
+- `congelarArray()` passa a ser método `Colisor.inicializarRetangulos()`
+  - processa o array com valores e gera o objeto congelado com funções (contrato do `Colisor`)
+  - `static` para rodar uma vez por classe de sprite
