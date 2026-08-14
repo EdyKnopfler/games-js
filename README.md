@@ -1,4 +1,4 @@
-# games-js
+# Nave vs Discos Voadores!!
 
 Jogo de nave (space shooter) em JavaScript puro, sem build e sem
 dependências. Escrito originalmente em 2014 como material de apoio de um
