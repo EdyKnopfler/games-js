@@ -1,18 +1,6 @@
 'use strict';
 
 /**
- * Congela um array e cada elemento dentro dele — Object.freeze() sozinho é
- * raso e não alcançaria os retângulos dentro do array. Usado nos
- * descritores estáticos RETANGULOS_COLISAO_* (nave.js, ovni.js, tiro.js),
- * que são montados uma vez e nunca devem ser reatribuídos depois.
- * @param {Array} array
- * @returns {Array} o mesmo array, congelado
- */
-function congelarArray(array) {
-   return Object.freeze(array.map(Object.freeze));
-}
-
-/**
  * Detecção de colisão por interseção de retângulos (AABB), desacoplada dos
  * tipos concretos de sprite: qualquer objeto com retangulosColisao() e
  * colidiuCom(outro) pode participar.
@@ -105,6 +93,19 @@ class Colisor {
     */
    excluirSprite(sprite) {
       this.spritesExcluir.push(sprite);
+   }
+
+   /**
+    * Congela um array de retângulos de colisão e cada retângulo dentro
+    * dele — Object.freeze() sozinho é raso e não alcançaria os retângulos.
+    * Usado pelas classes de sprite (nave.js, ovni.js, tiro.js) para montar
+    * seu descritor estático (static RETANGULOS_COLISAO) uma única vez, na
+    * definição da classe.
+    * @param {Array<{x:function,y:function,largura:function,altura:function}>} retangulos
+    * @returns {Array} o mesmo array, congelado
+    */
+   static criarRetangulos(retangulos) {
+      return Object.freeze(retangulos.map(Object.freeze));
    }
 
    /** Aplica as exclusões de sprite pendentes. */

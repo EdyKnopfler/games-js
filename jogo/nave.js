@@ -3,13 +3,13 @@
 const LARGURA_NAVE = 36;
 const ALTURA_NAVE = 48;
 
-const RETANGULOS_COLISAO_NAVE = congelarArray([
-   {x: i => i.x + 2,  y: i => i.y + 19, largura: () => 9,  altura: () => 13},
-   {x: i => i.x + 13, y: i => i.y + 3,  largura: () => 10, altura: () => 33},
-   {x: i => i.x + 25, y: i => i.y + 19, largura: () => 9,  altura: () => 13}
-]);
-
 class Nave {
+   static RETANGULOS_COLISAO = Colisor.criarRetangulos([
+      {x: (nave) => nave.x + 2,  y: (nave) => nave.y + 19, largura: () => 9,  altura: () => 13},
+      {x: (nave) => nave.x + 13, y: (nave) => nave.y + 3,  largura: () => 10, altura: () => 33},
+      {x: (nave) => nave.x + 25, y: (nave) => nave.y + 19, largura: () => 9,  altura: () => 13}
+   ]);
+
    constructor(context, teclado, imagem, imgExplosao) {
       this.context = context;
       this.teclado = teclado;
@@ -69,7 +69,7 @@ class Nave {
    }
 
    retangulosColisao() {
-      return RETANGULOS_COLISAO_NAVE;
+      return Nave.RETANGULOS_COLISAO;
    }
 
    colidiuCom(outro) {

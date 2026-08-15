@@ -1,12 +1,12 @@
 'use strict';
 
-const RETANGULOS_COLISAO_OVNI = congelarArray([
-   {x: i => i.x + 20, y: i => i.y + 1,  largura: () => 25, altura: () => 10},
-   {x: i => i.x + 2,  y: i => i.y + 11, largura: () => 60, altura: () => 12},
-   {x: i => i.x + 20, y: i => i.y + 23, largura: () => 25, altura: () => 7}
-]);
-
 class Ovni {
+   static RETANGULOS_COLISAO = Colisor.criarRetangulos([
+      {x: (ovni) => ovni.x + 20, y: (ovni) => ovni.y + 1,  largura: () => 25, altura: () => 10},
+      {x: (ovni) => ovni.x + 2,  y: (ovni) => ovni.y + 11, largura: () => 60, altura: () => 12},
+      {x: (ovni) => ovni.x + 20, y: (ovni) => ovni.y + 23, largura: () => 25, altura: () => 7}
+   ]);
+
    constructor(context, imagem, imgExplosao) {
       this.context = context;
       this.imagem = imagem;
@@ -33,7 +33,7 @@ class Ovni {
    }
 
    retangulosColisao() {
-      return RETANGULOS_COLISAO_OVNI;
+      return Ovni.RETANGULOS_COLISAO;
    }
 
    colidiuCom(outro) {

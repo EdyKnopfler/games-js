@@ -131,9 +131,10 @@ não é uma correção pontual, é a causa raiz que deixa de existir.
 - Detecção de colisão ([colisor.js](../framework/colisor.js)) ainda é O(n²)
   no número de pares testados — aceitável para um jogo simples com poucos
   sprites em tela — mas não recalcula/realoca retângulos mais: cada
-  `RETANGULOS_COLISAO_*` (`nave.js`/`ovni.js`/`tiro.js`) é um descritor
-  estático por classe, montado uma vez e congelado (`congelarArray()`),
-  com `x`/`y`/`largura`/`altura` como função que recebe a instância dona
-  e calcula o valor atual — sem alocação por frame. Ver
+  `static RETANGULOS_COLISAO` (`nave.js`/`ovni.js`/`tiro.js`) é um
+  descritor estático por classe, montado uma vez e congelado
+  (`Colisor.criarRetangulos()`), com `x`/`y`/`largura`/`altura` como
+  função que recebe a instância dona e calcula o valor atual — sem
+  alocação por frame. Ver
   [TODO.md](TODO.md#1-colisão-ineficiente-prioridade-alta) para o que
   ainda fica em aberto (broad phase, se a contagem de sprites crescer)

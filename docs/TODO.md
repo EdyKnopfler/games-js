@@ -12,10 +12,11 @@ O que foi feito:
   (`stringUnica`/`jaTestados`) por `for (i=0) for (j=i+1)` direto — cada
   par é testado exatamente uma vez, sem estrutura de dedupe nenhuma.
 - `retangulosColisao()` (`nave.js`/`ovni.js`/`tiro.js`) não recalcula nem
-  aloca mais nada por chamada: cada `RETANGULOS_COLISAO_*` é um descritor
-  estático por classe (`x`/`y`/`largura`/`altura` como função que recebe a
-  instância dona), montado uma vez no carregamento do módulo e congelado
-  (`congelarArray()`, em `colisor.js`). Antes, cada chamada de
+  aloca mais nada por chamada: cada `static RETANGULOS_COLISAO` é um
+  descritor estático por classe (`x`/`y`/`largura`/`altura` como função que
+  recebe a instância dona), montado uma vez na definição da classe via
+  `Colisor.criarRetangulos()` (método estático em `colisor.js`, que só
+  congela o array e cada retângulo dentro dele). Antes, cada chamada de
   `retangulosColisao()` fazia um `.map()` alocando array+objetos novos —
   e isso acontecia ~`3n(n-1)` vezes por frame por causa do dedupe caro.
 - `retangulosColidem()` agora recebe o sprite dono junto de cada
@@ -48,8 +49,8 @@ Encaminhamento a discutir:
 Já centralizado como constante nomeada:
 - Dimensões da nave (36×48) → `LARGURA_NAVE`/`ALTURA_NAVE`
   ([nave.js](../jogo/nave.js))
-- Offsets dos retângulos de colisão → `RETANGULOS_COLISAO_NAVE`
-  ([nave.js](../jogo/nave.js)), `RETANGULOS_COLISAO_OVNI`
+- Offsets dos retângulos de colisão → `Nave.RETANGULOS_COLISAO`
+  ([nave.js](../jogo/nave.js)), `Ovni.RETANGULOS_COLISAO`
   ([ovni.js](../jogo/ovni.js))
 
 Segue hardcoded:
@@ -106,10 +107,30 @@ crescer o suficiente para justificar:
   lugares reaproveitando o mesmo slot) — provavelmente vivendo dentro da
   própria `Partida`, já dona do ciclo de vida de uma rodada
 
-## 7. Refactor dos retângulos de colisão
+## 7. Refactor dos retângulos de colisão — resolvido
 
-Ficou mais eficiente, mas agora o código está confuso. Para melhorar:
-- A constante em cada sprite volta a ter só valores
-- `congelarArray()` passa a ser método `Colisor.inicializarRetangulos()`
-  - processa o array com valores e gera o objeto congelado com funções (contrato do `Colisor`)
-  - `static` para rodar uma vez por classe de sprite
+Ficou mais eficiente (item 1), mas o jeito de montar `congelarArray(...)`
+como `const` solta no topo do módulo, longe da classe, estava confuso.
+
+Cogitado e descartado: reduzir a constante de cada sprite a só valores
+brutos (offset x/y + largura/altura fixos) e gerar as closures num método
+genérico. Não fecha para todo caso — o retângulo do `Tiro`
+([tiro.js](../jogo/tiro.js)) não é offset+tamanho fixo, é o próprio
+retângulo do sprite (`x: i => i.x`, `largura: i => i.largura`), então
+teria que virar caso especial de qualquer forma. Generalizar a forma do
+dado teria trocado "confuso" por "confuso de outro jeito", sem ganho real.
+Cogitado e descartado também: uma classe `RetanguloColisao` — os
+retângulos não têm estado próprio, só dado; criar uma classe por isso
+proliferaria classes sem necessidade.
+
+O que foi feito, então: manter as closures como estão (cada caso — offset
+fixo ou espelhando o sprite — continua explícito ali, sem indireção nova),
+só mudando *onde* e *como* o array nasce congelado:
+- `congelarArray()` virou `static Colisor.criarRetangulos()`
+  ([colisor.js](../framework/colisor.js)) — mesma lógica (`Object.freeze`
+  do array e de cada retângulo), só relocada para o método do `Colisor`
+  que é dono do contrato, em vez de função solta.
+- Cada `RETANGULOS_COLISAO_*` module-level virou `static RETANGULOS_COLISAO`
+  dentro da própria classe do sprite (`Nave`/`Ovni`/`Tiro`), inicializado
+  chamando `Colisor.criarRetangulos([...])` — descritor nasce junto da
+  classe dona, não antes dela no arquivo.
