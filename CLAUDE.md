@@ -20,8 +20,9 @@ tags em [index.html](index.html).
 
 Ver [docs/](docs/):
 
-- [docs/convencoes.md](docs/convencoes.md) — convenções de escrita para
-  código e docs deste projeto. **Seguir ao comentar código ou editar docs.**
+- [docs/docs-e-comentarios.md](docs/docs-e-comentarios.md) — regras pra
+  comentário no código e pra escrita de doc neste projeto. **Seguir ao
+  comentar código ou editar docs.**
 - [docs/decisoes-de-projeto.md](docs/decisoes-de-projeto.md) — por que o
   código é como é (contexto, arquitetura, padrões usados).
 - [docs/framework.md](docs/framework.md) — as peças genéricas reutilizáveis

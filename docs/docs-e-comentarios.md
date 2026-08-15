@@ -1,4 +1,4 @@
-# Convenções de escrita (código e docs)
+# Docs e comentários
 
 - Comentário no código: só o que não é óbvio lendo o código (armadilha, invariante, motivo de workaround) — curto, de preferência uma linha
   - se o porquê já está em `docs/`, aponta pra lá em vez de reexplicar
