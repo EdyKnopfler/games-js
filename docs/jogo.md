@@ -22,7 +22,7 @@ conforme a direção (reta / virando esquerda / virando direita).
 - `vidasExtras` — contador de vidas; `acabaramVidas` é um callback setado
   externamente (por `Partida`) para disparar o fim da partida. `perdeuVida`
   é outro callback externo, disparado em toda vida perdida (inclusive a
-  última) — `Partida` o usa para acionar `CriadorInimigos.recuar()`.
+  última) — `Partida` o usa para acionar `CriadorInimigos.aoPerderVida()`.
 
 ### Ovni — [ovni.js](../jogo/ovni.js)
 
@@ -69,12 +69,18 @@ Sistema de processamento (mesmo contrato de `Colisor`, registrado via
   de `INTERVALO_CRIACAO_OVNI_INICIAL` a `INTERVALO_CRIACAO_OVNI_MINIMO` ao
   longo de `TEMPO_RAMPA_DIFICULDADE`. `tempoJogado` só avança com a
   animação ligada, então pausar não conta como progresso de dificuldade.
+- Velocidade do `Ovni` sorteada dentro de uma janela rolante
+  (`inicioJanelaVelocidade()`, largura `LARGURA_JANELA_VELOCIDADE` = 1/5 da
+  faixa `VELOCIDADE_MIN_OVNI`–`VELOCIDADE_MAX_OVNI`) que desliza de
+  `[MIN, MIN+largura]` a `[MAX-largura, MAX]` ao longo de
+  `TEMPO_RAMPA_DIFICULDADE`, conforme `tempoDesdeUltimaVida`.
 - `reiniciar()` zera só a contagem até o próximo ovni, não `tempoJogado` —
   evita "explodir" vários ovnis de uma vez ao retomar de uma pausa longa.
-- `recuar()` (via `Nave.perdeuVida`) devolve `RECUO_JANELA_AO_PERDER_VIDA`
-  de `tempoJogado` a cada vida perdida. Recuo fixo, mas como
+- `aoPerderVida()` (via `Nave.perdeuVida`) reage a cada vida perdida: recua
+  `RECUO_JANELA_AO_PERDER_VIDA` de `tempoJogado` (recuo fixo, mas como
   `intervaloAtual()` é linear, o respiro já sai maior cedo e menor tarde,
-  sem precisar de função de recuo variável.
+  sem função de recuo variável) e zera `tempoDesdeUltimaVida` (janela de
+  velocidade volta ao início).
 
 ## Fluxo do jogo
 

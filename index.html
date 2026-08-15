@@ -21,39 +21,38 @@
    <script src="jogo/partida.js"></script>
    <script src="jogo/jogo-nave.js"></script>
    <style>
-   #link_jogar {
-      /* Inicia oculto */
-      display: none;
-   
-      /* Cores e fundo */
-      color: yellow;
-      background: url(img/botao-jogar.png);
-         
-      /* Fonte */
-      font-size: 20px;
-      font-family: sans-serif;
-      
-      /* Sem sublinhado e com sombra */
-      text-decoration: none;
-      text-shadow: 2px 2px 5px black;
-         
-      /* Posicionamento */
-      position: absolute;
-      left: 220px;
-      top: 330px;
+      #area_jogo {
+         position: relative;
+         width: 500px;
+         margin: 0 auto;
+      }
 
-      /* A imagem do botão é 72x72, descontamos os paddings */
-      width: 52px;
-      height: 26px;
-      padding: 23px 10px;
-   }
+      #link_jogar {
+         display: none;
+         color: yellow;
+         background: url(img/botao-jogar.png);
+         font-size: 20px;
+         font-family: sans-serif;
+         text-decoration: none;
+         text-shadow: 2px 2px 5px black;
+         position: absolute;
+         left: 220px;
+         top: 330px;
+
+         /* A imagem do botão é 72x72, descontamos os paddings */
+         width: 52px;
+         height: 26px;
+         padding: 23px 10px;
+      }
    </style>
 </head>
 
 <body>
-   <canvas id="canvas_animacao" width="500" height="500"></canvas>
-   
-   <a id="link_jogar" href="#">Jogar</a>
+   <div id="area_jogo">
+      <canvas id="canvas_animacao" width="500" height="500"></canvas>
+
+      <a id="link_jogar" href="#">Jogar</a>
+   </div>
    
    <script>
       'use strict';

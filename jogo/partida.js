@@ -56,7 +56,7 @@ class Partida {
          if (this.jogoEncerrado) this.jogoEncerrado();
       };
 
-      this.nave.perdeuVida = () => this.criadorInimigos.recuar();
+      this.nave.perdeuVida = () => this.criadorInimigos.aoPerderVida();
 
       this.colisor.aoColidir = (o1, o2) => {
          if ( (o1 instanceof Tiro && o2 instanceof Ovni) ||

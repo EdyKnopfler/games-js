@@ -2,9 +2,11 @@
 
 const INTERVALO_CRIACAO_OVNI_INICIAL = 1000;
 const INTERVALO_CRIACAO_OVNI_MINIMO = 300;
-const TEMPO_RAMPA_DIFICULDADE = 300000;
+const TEMPO_RAMPA_DIFICULDADE = 120000;
 const VELOCIDADE_MIN_OVNI = 500;
 const VELOCIDADE_MAX_OVNI = 1000;
+const LARGURA_JANELA_VELOCIDADE =
+   (VELOCIDADE_MAX_OVNI - VELOCIDADE_MIN_OVNI) / 5;
 const RECUO_JANELA_AO_PERDER_VIDA = 30000;
 
 /**
@@ -24,6 +26,7 @@ class CriadorInimigos {
       this.colisor = colisor;
       this.ultimoOvni = new Date().getTime();
       this.tempoJogado = 0;
+      this.tempoDesdeUltimaVida = 0;
    }
 
    processar() {
@@ -31,6 +34,7 @@ class CriadorInimigos {
       const decorrido = agora - this.ultimoOvni;
 
       this.tempoJogado += this.animacao.decorrido;
+      this.tempoDesdeUltimaVida += this.animacao.decorrido;
 
       if (decorrido > this.intervaloAtual()) {
          this.novoOvni();
@@ -45,13 +49,20 @@ class CriadorInimigos {
          (INTERVALO_CRIACAO_OVNI_INICIAL - INTERVALO_CRIACAO_OVNI_MINIMO);
    }
 
+   /** Início da janela de velocidade atual, avançando com `tempoDesdeUltimaVida`. */
+   inicioJanelaVelocidade() {
+      const progresso =
+         Math.min(this.tempoDesdeUltimaVida / TEMPO_RAMPA_DIFICULDADE, 1);
+      return VELOCIDADE_MIN_OVNI + progresso *
+         (VELOCIDADE_MAX_OVNI - VELOCIDADE_MIN_OVNI - LARGURA_JANELA_VELOCIDADE);
+   }
+
    novoOvni() {
       const ovni = new Ovni(this.context, this.imgOvni, this.imgExplosao);
 
-      // Mínimo: VELOCIDADE_MIN_OVNI; máximo: VELOCIDADE_MAX_OVNI
+      const inicioJanela = this.inicioJanelaVelocidade();
       ovni.velocidade = Math.floor(
-         VELOCIDADE_MIN_OVNI +
-         Math.random() * (VELOCIDADE_MAX_OVNI - VELOCIDADE_MIN_OVNI + 1)
+         inicioJanela + Math.random() * (LARGURA_JANELA_VELOCIDADE + 1)
       );
 
       // Mínimo: 0; máximo: largura do canvas - largura do ovni
@@ -72,12 +83,14 @@ class CriadorInimigos {
    }
 
    /**
-    * Dá um respiro ao perder uma vida, recuando `tempoJogado`. Recuo fixo
-    * — mas como intervaloAtual() é linear, isso já basta pra dar mais
-    * respiro cedo (pode zerar) e menos tarde, sem função de recuo variável.
+    * Reage a uma vida perdida: recua `tempoJogado` (respiro no ritmo de
+    * criação — fixo, mas como intervaloAtual() é linear já sai maior cedo
+    * e menor tarde) e reinicia `tempoDesdeUltimaVida` (janela de
+    * velocidade volta ao início).
     */
-   recuar() {
+   aoPerderVida() {
       this.tempoJogado =
          Math.max(0, this.tempoJogado - RECUO_JANELA_AO_PERDER_VIDA);
+      this.tempoDesdeUltimaVida = 0;
    }
 }
