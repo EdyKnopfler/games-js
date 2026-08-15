@@ -9,10 +9,13 @@ class Colisor {
    constructor() {
       this.sprites = [];
       /**
-       * Callback opcional chamado após qualquer colisão detectada, com os
-       * dois sprites envolvidos: function(sprite1, sprite2). Usado pelo
+       * Callback opcional chamado após qualquer colisão detectada:
+       * function(sprite1, sprite2, retangulo1, retangulo2). Usado pelo
        * bootstrap para regras que não pertencem a nenhuma das duas entidades
-       * (ex.: pontuação ao tiro acertar um ovni).
+       * (ex.: pontuação ao tiro acertar um ovni). retangulo1/retangulo2 são
+       * os descritores (ver retangulosColisao()) que colidiram, um de cada
+       * sprite, na mesma ordem — úteis quando a entidade os identifica por
+       * `tag` (ver docs/colisao-avancada.md).
        */
       this.aoColidir = null;
       this.spritesExcluir = [];
@@ -46,7 +49,10 @@ class Colisor {
    /**
     * Testa todos os retângulos de sprite1 contra os de sprite2; na primeira
     * interseção encontrada, notifica ambos via colidiuCom() e dispara
-    * aoColidir(), sem checar os retângulos restantes.
+    * aoColidir(), sem checar os retângulos restantes. Cada colidiuCom()
+    * recebe o próprio retângulo que colidiu antes do retângulo do outro
+    * sprite — parâmetros extras, opcionais: uma entidade que não precisa
+    * saber qual retângulo colidiu pode ter colidiuCom(outro) normalmente.
     * @param {*} sprite1
     * @param {*} sprite2
     */
@@ -57,10 +63,10 @@ class Colisor {
       for (const ret1 of rets1) {
          for (const ret2 of rets2) {
             if (this.retangulosColidem(ret1, sprite1, ret2, sprite2)) {
-               sprite1.colidiuCom(sprite2);
-               sprite2.colidiuCom(sprite1);
+               sprite1.colidiuCom(sprite2, ret1, ret2);
+               sprite2.colidiuCom(sprite1, ret2, ret1);
 
-               if (this.aoColidir) this.aoColidir(sprite1, sprite2);
+               if (this.aoColidir) this.aoColidir(sprite1, sprite2, ret1, ret2);
 
                return;
             }
