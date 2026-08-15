@@ -2,10 +2,10 @@
 
 const INTERVALO_CRIACAO_OVNI_INICIAL = 1000;
 const INTERVALO_CRIACAO_OVNI_MINIMO = 300;
-// Tempo de jogo (ms) para o intervalo cair do valor inicial até o mínimo.
-const TEMPO_RAMPA_DIFICULDADE = 120000;
+const TEMPO_RAMPA_DIFICULDADE = 300000;
 const VELOCIDADE_MIN_OVNI = 500;
 const VELOCIDADE_MAX_OVNI = 1000;
+const RECUO_JANELA_AO_PERDER_VIDA = 30000;
 
 /**
  * Sistema de processamento (mesmo contrato de Colisor): a cada processar(),
@@ -69,5 +69,15 @@ class CriadorInimigos {
    /** Reinicia a contagem — usado ao (re)começar ou retomar o jogo. */
    reiniciar() {
       this.ultimoOvni = new Date().getTime();
+   }
+
+   /**
+    * Dá um respiro ao perder uma vida, recuando `tempoJogado`. Recuo fixo
+    * — mas como intervaloAtual() é linear, isso já basta pra dar mais
+    * respiro cedo (pode zerar) e menos tarde, sem função de recuo variável.
+    */
+   recuar() {
+      this.tempoJogado =
+         Math.max(0, this.tempoJogado - RECUO_JANELA_AO_PERDER_VIDA);
    }
 }

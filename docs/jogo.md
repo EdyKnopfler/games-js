@@ -20,7 +20,9 @@ conforme a direção (reta / virando esquerda / virando direita).
   vs. acabar o jogo) no callback `fimDaExplosao`, para a explosão dar tempo
   de animar antes da nave reaparecer.
 - `vidasExtras` — contador de vidas; `acabaramVidas` é um callback setado
-  externamente (por `Partida`) para disparar o fim da partida.
+  externamente (por `Partida`) para disparar o fim da partida. `perdeuVida`
+  é outro callback externo, disparado em toda vida perdida (inclusive a
+  última) — `Partida` o usa para acionar `CriadorInimigos.recuar()`.
 
 ### Ovni — [ovni.js](../jogo/ovni.js)
 
@@ -63,20 +65,16 @@ da nave, primeiro quadro, sem animar) e o texto da pontuação.
 
 Sistema de processamento (mesmo contrato de `Colisor`, registrado via
 `animacao.novoProcessamento()`), não é uma entidade desenhável.
-- A cada `processar()`, cria um `Ovni` se já passou o intervalo atual
-  (`intervaloAtual()`) desde o último — posição `x` e velocidade aleatórias
-  (`VELOCIDADE_MIN_OVNI`/`VELOCIDADE_MAX_OVNI`, 500–1000), `y` começa acima
-  do topo do canvas.
-- `intervaloAtual()` começa em `INTERVALO_CRIACAO_OVNI_INICIAL` (1000ms) e
-  cai linearmente com `tempoJogado` até `INTERVALO_CRIACAO_OVNI_MINIMO`
-  (300ms), ao longo de `TEMPO_RAMPA_DIFICULDADE` (2min) — dificuldade
-  crescente e lenta. `tempoJogado` só avança enquanto a animação está
-  ligada (soma `animacao.decorrido` a cada `processar()`), então pausar não
-  conta como progresso de dificuldade.
-- `reiniciar()` zera a contagem de tempo até o próximo ovni (não
-  `tempoJogado`) — chamado por `Partida` só ao retomar de uma pausa (numa
-  partida nova a contagem já nasce zerada, ver abaixo), para não "explodir"
-  vários ovnis de uma vez após uma pausa longa.
+- Cria um `Ovni` por vez, no ritmo de `intervaloAtual()` — cai linearmente
+  de `INTERVALO_CRIACAO_OVNI_INICIAL` a `INTERVALO_CRIACAO_OVNI_MINIMO` ao
+  longo de `TEMPO_RAMPA_DIFICULDADE`. `tempoJogado` só avança com a
+  animação ligada, então pausar não conta como progresso de dificuldade.
+- `reiniciar()` zera só a contagem até o próximo ovni, não `tempoJogado` —
+  evita "explodir" vários ovnis de uma vez ao retomar de uma pausa longa.
+- `recuar()` (via `Nave.perdeuVida`) devolve `RECUO_JANELA_AO_PERDER_VIDA`
+  de `tempoJogado` a cada vida perdida. Recuo fixo, mas como
+  `intervaloAtual()` é linear, o respiro já sai maior cedo e menor tarde,
+  sem precisar de função de recuo variável.
 
 ## Fluxo do jogo
 

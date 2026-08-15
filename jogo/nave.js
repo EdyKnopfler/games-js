@@ -22,6 +22,7 @@ class Nave {
       this.spritesheet.intervalo = 100;
       this.imgExplosao = imgExplosao;
       this.acabaramVidas = null;
+      this.perdeuVida = null;
       this.vidasExtras = 3;
       this.cadenciaTiro = 300;
       this.ultimoTiro = 0;
@@ -89,6 +90,7 @@ class Nave {
 
          exp1.fimDaExplosao = () => {
             this.vidasExtras--;
+            if (this.perdeuVida) this.perdeuVida();
 
             if (this.vidasExtras < 0) {
                if (this.acabaramVidas) this.acabaramVidas();
