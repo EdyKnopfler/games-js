@@ -32,8 +32,3 @@ Ver [docs/](docs/):
 - [docs/colisao-avancada.md](docs/colisao-avancada.md) — exercício de
   modelagem para colisões cujo resultado depende de qual retângulo se
   tocou (tag nos retângulos, hitbox condicional por estado).
-
-Esses docs, via de regra, registram decisões e o estado *atual* do projeto, não necessariamente ordens
-fixas — podem mudar junto com as decisões. *ATENÇÃO:* quando a mudança parecer de alto risco/criticidade (real ou
-percebido), apresente o conflito ao usuário em vez de decidir
-sozinho.

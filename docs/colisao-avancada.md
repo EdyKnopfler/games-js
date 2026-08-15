@@ -6,7 +6,7 @@ e `aoColidir(sprite1, sprite2, ret1, ret2)`
 ([colisor.js](../framework/colisor.js)) recebem os dois retângulos que
 colidiram, meu retângulo primeiro. Nenhuma entidade do jogo de nave usa
 isso — `Nave`/`Ovni`/`Tiro` não declaram tag e ignoram os parâmetros
-extras (`colidiuCom(outro)` de um argumento só continua válido). Este doc
+extras (`colidiuCom(outro)` de um argumento só é válido). Este doc
 mostra como usar quando o framework for reaproveitado num jogo que
 precise de resultado por parte tocada: Mario pulando num Goomba, o soco de
 um lutador.
@@ -102,11 +102,15 @@ class Lutador {
 }
 ```
 
-Fora de `RETANGULOS_SOCO`, `'mao'` simplesmente não está no array — sem
-retângulo "escondido" degenerado, sem risco de falso positivo por tamanho
-zero. Cada conjunto continua congelado uma vez só
+Fora de `RETANGULOS_SOCO`, `'mao'` simplesmente não está no array
+devolvido por `retangulosColisao()`. Cada conjunto é congelado uma vez só
 ([decisoes-de-projeto.md](decisoes-de-projeto.md#simplicidade-sobre-performance));
 só a referência devolvida muda por chamada.
+
+**Atenção:** não modele isso fazendo o retângulo colapsar pra tamanho
+zero em vez de trocar de conjunto — `retangulosColidem()` usa
+desigualdade estrita, e um retângulo de tamanho zero posicionado dentro
+do range do outro ainda "colide".
 
 Retângulos condicionais por estado e tag são mecanismos independentes: o
 primeiro é só `retangulosColisao()` escolhendo qual conjunto devolver; o
